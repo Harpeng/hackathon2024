@@ -13,22 +13,31 @@ export default defineNuxtConfig({
   postcss: {
     plugins: {
       autoprefixer: {},
-    }
+    },
   },
   vite: {
     css: {
       preprocessorOptions: {
         scss: {
           additionalData: `@use "@/assets/vars/_colors.scss" as *;
-          @use "@/assets/vars/_fonts.scss" as *;
           @use "@/assets/vars/_screen.scss" as *;
           @use "@/assets/vars/_size.scss" as *;
           @use "@/assets/vars/_text.scss" as *;`,
-          api: 'modern-compiler',
+          api: "modern-compiler",
         },
       },
     },
   },
 
-  modules: ["@nuxt/icon", "@nuxt/image", "@nuxtjs/google-fonts"],
+  modules: [
+    "@nuxt/ui",
+    "@nuxt/icon",
+    "@nuxtjs/color-mode",
+    "@nuxt/image",
+    "@nuxtjs/google-fonts",
+    "@nuxtjs/axios",
+    ['@nuxtjs/recaptcha', {
+      siteKey: String,
+    }]
+  ],
 });
