@@ -1,9 +1,4 @@
-@import './normalize';
-@import '@assets/vars/_colors.scss';
-@import '@assets/vars/_fonts.scss';
-@import '@assets/vars/_screen.scss';
-@import '@assets/vars/_size.scss';
-@import '@assets/vars/_text.scss';
+@use './normalize';
 
 html {
     scroll-behavior: smooth;
