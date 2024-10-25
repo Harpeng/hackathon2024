@@ -3,32 +3,42 @@
 import { resolve } from "path";
 
 export default defineNuxtConfig({
-  compatibilityDate: "2024-04-03",
-
   alias: {
     "@": resolve(__dirname, ""),
   },
 
   css: ["~/assets/main.scss"],
+
   postcss: {
     plugins: {
+      tailwindcss: {},
       autoprefixer: {},
-    }
+    },
   },
   vite: {
     css: {
       preprocessorOptions: {
         scss: {
           additionalData: `@use "@/assets/vars/_colors.scss" as *;
-          @use "@/assets/vars/_fonts.scss" as *;
           @use "@/assets/vars/_screen.scss" as *;
           @use "@/assets/vars/_size.scss" as *;
           @use "@/assets/vars/_text.scss" as *;`,
-          api: 'modern-compiler',
+          api: "modern-compiler",
         },
       },
     },
   },
 
-  modules: ["@nuxt/icon", "@nuxt/image", "@nuxtjs/google-fonts"],
+  modules: [
+    "@nuxt/image",
+    '@nuxt/icon',
+    "@nuxtjs/google-fonts",
+    "@nuxt/ui"
+  ],
+  ui: {
+    global: true,
+    disableGlobalStyles: false,
+  },
+
+  compatibilityDate: "2024-10-25"
 });
