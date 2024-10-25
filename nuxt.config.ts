@@ -3,15 +3,15 @@
 import { resolve } from "path";
 
 export default defineNuxtConfig({
-  compatibilityDate: "2024-04-03",
-
   alias: {
     "@": resolve(__dirname, ""),
   },
 
   css: ["~/assets/main.scss"],
+
   postcss: {
     plugins: {
+      tailwindcss: {},
       autoprefixer: {},
     },
   },
@@ -30,14 +30,15 @@ export default defineNuxtConfig({
   },
 
   modules: [
-    "@nuxt/ui",
-    "@nuxt/icon",
-    "@nuxtjs/color-mode",
     "@nuxt/image",
+    '@nuxt/icon',
     "@nuxtjs/google-fonts",
-    "@nuxtjs/axios",
-    ['@nuxtjs/recaptcha', {
-      siteKey: String,
-    }]
+    "@nuxt/ui"
   ],
+  ui: {
+    global: true,
+    disableGlobalStyles: false,
+  },
+
+  compatibilityDate: "2024-10-25"
 });

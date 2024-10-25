@@ -1,8 +1,6 @@
 <template>
-    <h1 class="div">Hello</h1>
 </template>
+<script>
+</script>
 <style lang="scss">
-.div {
-    color: $white;
-}
 </style>
