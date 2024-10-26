@@ -10,6 +10,11 @@
 </script>
 <style lang="scss">
 .kanban {
-    padding: 2rem;
+    padding: 1rem;
+}
+@media (min-width: 1440px) {
+    .kanban {
+        padding: 2.5rem;
+    }   
 }
 </style>

@@ -57,7 +57,7 @@
         justify-content: space-between;
         align-items: center;
         gap: 40px;
-        margin-bottom: 40px;
+        margin: 40px 0;
         &__title {
             font-size: 1.25rem;
             font-weight: 500;
@@ -86,6 +86,19 @@
         }
         &__icons.close {
             display: none;
+        }
+        &__icon {
+            cursor: pointer;
+            svg {
+                path, circle {
+                    transition: .2s;
+                }
+            }
+        }
+        &__icon:hover svg {
+            path, circle {
+                stroke: $black;
+            }
         }
         #import {
             display: none;
