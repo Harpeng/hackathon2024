@@ -8,6 +8,7 @@ export default defineNuxtConfig({
   },
 
   css: ["~/assets/main.scss"],
+  components: true,
 
   postcss: {
     plugins: {
@@ -35,7 +36,6 @@ export default defineNuxtConfig({
     ["@nuxtjs/google-fonts", {
       families: {
         Inter: [500, 700],
-        display: 'swap',
       }
     }],
     "@nuxt/ui"

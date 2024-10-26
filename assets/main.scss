@@ -22,6 +22,7 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  background-color: $white;
 }
 
 a {
@@ -42,4 +43,5 @@ h6,
 p {
   margin: 0;
   padding: 0;
+  color: $black;
 }
