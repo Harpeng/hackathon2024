@@ -7,9 +7,9 @@ export default defineNuxtConfig({
     "@": resolve(__dirname, ""),
   },
 
-  components: true,
 
   css: ["~/assets/main.scss"],
+  components: true,
   ssr: false,
   vite: {
     css: {
