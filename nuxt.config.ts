@@ -32,7 +32,12 @@ export default defineNuxtConfig({
   modules: [
     "@nuxt/image",
     '@nuxt/icon',
-    "@nuxtjs/google-fonts",
+    ["@nuxtjs/google-fonts", {
+      families: {
+        Inter: [500, 700],
+        display: 'swap',
+      }
+    }],
     "@nuxt/ui"
   ],
   ui: {
