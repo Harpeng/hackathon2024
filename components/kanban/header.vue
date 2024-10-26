@@ -11,13 +11,13 @@
                 <KanbanInput @checkInput="checkInput"></KanbanInput>
             </div>
             <div :class="['header__icons', inputState ? 'close' : '']">
-                <div class="header__icon" id="import">
+                <a href="https://coco-jamboo.ru/api/tasks/export" class="header__icon" id="import">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M8 9L6 9C3.79086 9 2 10.7909 2 13L2 18C2 20.2091 3.79086 22 6 22L18 22C20.2091 22 22 20.2091 22 18L22 13C22 10.7909 20.2091 9 18 9L16 9" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round"/>
                         <path d="M9 5L11.2929 2.70711C11.6834 2.31658 12.3166 2.31658 12.7071 2.70711L15 5" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round"/>
                         <path d="M12 3L12 14" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round"/>
                     </svg>
-                </div>
+                </a>
                 <div class="header__icon" id="filter">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M3 5C3 3.89543 3.89543 3 5 3H19C20.1046 3 21 3.89543 21 5V5.41751C21 6.17739 20.7116 6.90895 20.1932 7.46447L15.2379 12.7737C14.8922 13.144 14.7 13.6317 14.7 14.1383V17.682C14.7 18.0607 14.486 18.407 14.1472 18.5764L10.7472 20.2764C10.0823 20.6088 9.3 20.1253 9.3 19.382V14.1383C9.3 13.6317 9.10776 13.144 8.76211 12.7737L3.80684 7.46447C3.28836 6.90895 3 6.17739 3 5.41751V5Z" stroke="#9E9E9E" stroke-width="1.5"/>
@@ -57,6 +57,7 @@
         justify-content: space-between;
         align-items: center;
         gap: 40px;
+        margin-bottom: 40px;
         &__title {
             font-size: 1.25rem;
             font-weight: 500;
