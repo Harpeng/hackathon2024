@@ -7,14 +7,10 @@ export default defineNuxtConfig({
     "@": resolve(__dirname, ""),
   },
 
+  components: true,
+
   css: ["~/assets/main.scss"],
 
-  postcss: {
-    plugins: {
-      tailwindcss: {},
-      autoprefixer: {},
-    },
-  },
   vite: {
     css: {
       preprocessorOptions: {
@@ -31,14 +27,11 @@ export default defineNuxtConfig({
 
   modules: [
     "@nuxt/image",
-    '@nuxt/icon',
     ["@nuxtjs/google-fonts", {
       families: {
         Inter: [500, 700],
-        display: 'swap',
       }
     }],
-    "@nuxt/ui"
   ],
   ui: {
     global: true,
