@@ -33,10 +33,6 @@ export default defineNuxtConfig({
       }
     }],
   ],
-  ui: {
-    global: true,
-    disableGlobalStyles: false,
-  },
 
   compatibilityDate: "2024-10-25"
 });
