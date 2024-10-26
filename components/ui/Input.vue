@@ -47,7 +47,12 @@
     </p>
     <div
       v-if="errors"
-      :class="['ui-field__errors', `ui-field__errors--${variant}`, 'paragraph', 'paragraph_utility']"
+      :class="[
+        'ui-field__errors',
+        `ui-field__errors--${variant}`,
+        'paragraph',
+        'paragraph_utility',
+      ]"
     >
       <div v-for="elem of errors" :key="elem.$uid">
         <span>{{ elem.$message }}</span>
@@ -155,6 +160,7 @@ export default {
   }
 
   &__input {
+    width: 100%;
     height: 48px;
     border-radius: 14px;
     outline: none;
@@ -164,6 +170,11 @@ export default {
     font-weight: 500;
     font-size: 18px;
     line-height: 21.78px;
+
+    @media (max-width: 767px) {
+      font-size: 16px;
+      line-height: 19.36px;
+    }
 
     &:focus {
       border-color: $purple-light;
@@ -175,7 +186,6 @@ export default {
 
     &--error {
       border-color: $red;
-      color: $red;
     }
   }
 
@@ -185,7 +195,7 @@ export default {
     height: 90%;
     background-color: $white;
     top: 3px;
-    right: 5%;
+    right: 3%;
   }
 
   &__errors {

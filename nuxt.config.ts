@@ -7,11 +7,10 @@ export default defineNuxtConfig({
     "@": resolve(__dirname, ""),
   },
 
-  components: true,
 
   css: ["~/assets/main.scss"],
   components: true,
-
+  ssr: false,
   vite: {
     css: {
       preprocessorOptions: {
@@ -33,6 +32,9 @@ export default defineNuxtConfig({
         Inter: [500, 700],
       }
     }],
+  ],
+  plugins: [
+    '@/plugins/toast.js',
   ],
 
   compatibilityDate: "2024-10-25"

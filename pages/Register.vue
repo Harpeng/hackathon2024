@@ -2,24 +2,26 @@
   <div class="register">
     <div class="register__container">
       <AuthTitleBlock title="Добро пожаловать" span="Регистрация" />
-      <Input label="ФИО" hasIcon>
-        <i class="register__icon"></i>
-      </Input>
+      <AuthForm />
     </div>
   </div>
 </template>
 <script>
 import AuthTitleBlock from "@/components/auth/TitleBlock.vue";
-import Button from "@/components/ui/Button.vue";
-import Input from "@/components/ui/Input.vue";
+import AuthForm from "@/components/auth/Form.vue";
 
 export default {
-  components: { AuthTitleBlock, Button, Input },
+  components: { AuthTitleBlock, AuthForm },
 };
 </script>
 <style lang="scss">
 .register {
-  padding: 231px 15px;
+  height: 100vh;
+  padding: 100px 15px;
+
+  @include media-xs-min {
+    padding: 5vw 15px;
+  }
 
   &__container {
     display: flex;
@@ -35,7 +37,7 @@ export default {
     top: 20%;
     left: 10%;
     display: block;
-    background-image: url('/assets/images/eye.svg');
+    background-image: url("/assets/images/eye.svg");
     width: 24px;
     height: 24px;
     background-repeat: no-repeat;
