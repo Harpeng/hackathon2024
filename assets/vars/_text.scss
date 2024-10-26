@@ -4,6 +4,11 @@
     &_h1 {
         font-size: 40px;
         line-height: 40px;
+
+        @media (max-width: 767px) {
+            font-size: 30px;
+            line-height: 30px;
+        }
     }
 
     &_h2 {
@@ -17,11 +22,21 @@
     &_main {
         font-size: 18px;
         line-height: 21.78px;
+
+        @media (max-width: 767px) {
+            font-size: 16px;
+            line-height: 19.36px;
+        }
     }
     &_strong {
         font-weight: 700;
         font-size: 18px;
         line-height: 18px;
+
+        @media (max-width: 767px) {
+            font-size: 16px;
+            line-height: 16px;
+        }
     }
     &_utility {
         font-size: 14px;

@@ -1,6 +1,7 @@
-<template>
-</template>
-<script>
+<template></template>
+<script setup>
+definePageMeta({
+  middleware: "auth",
+});
 </script>
-<style lang="scss">
-</style>
+<style lang="scss"></style>
