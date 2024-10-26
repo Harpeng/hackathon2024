@@ -1,17 +1,31 @@
 <template>
     <div class="content">
         <ul class="content-list">
-            <li class="content-item">
-                <h2 class="content-title" id="backlog" @click="setActive">
-                    <span>Разработка</span>
+            <li class="content-item" v-for="(status, index) in data" :key="status.code">
+                <h2 class="content-title" @click="setActive">
+                    <span>{{ status.title }}</span>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M7 10L11.3753 13.5002C11.7405 13.7924 12.2595 13.7924 12.6247 13.5002L17 10" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round"/>
                     </svg>
                 </h2>
-                <ul class="content-sublist sublist" @drop="dropItem($event, index)" @dragover.prevent>
-                    <li class="sublist-item task" :draggable="true" @dragstart="dragItem($event, item, index, itemIndex)">
+                <ul 
+                    class="content-sublist sublist"
+                    @drop.prevent="drop"
+                    @dragover.prevent
+                    @dragenter="dragEnter(index)"
+                    @dragend="dragEnd"
+                    :id="status.code"
+                    >
+                    <li 
+                        class="sublist-item task"
+                        v-for="task in status.tasks" 
+                        :key="task.code"
+                        :draggable="true"
+                        @dragstart="drag"
+                        :id="task.id"
+                        >
                         <h3 class="task-title">
-                            <span>Внедрение Я. Метрики</span>
+                            <span>{{ task.title }}</span>
                             <div class="task-menu">
                                 <span class="task-btn" @click="checkMenu">...</span>
                                 <ul class="task-edit edit">
@@ -28,113 +42,9 @@
                             </div>
                         </h3>
                         <p class="task-text">
-                            Настроить интеграция Метрики и Директа: номер счётчика указан в параметрах кампании, включена разметка для ссылок.
+                            {{ task.description }}
                         </p>
-                        <a href="#" class="task-link">Иванов И.А.</a>
-                    </li>
-                    <li class="sublist-item task" :draggable="true" @dragstart="dragItem($event, item, index, itemIndex)">
-                        <h3 class="task-title">
-                            <span>Внедрение Я. Метрики</span>
-                            <div class="task-menu">
-                                <span class="task-btn">...</span>
-                            </div>
-                        </h3>
-                        <p class="task-text">
-                            Настроить интеграция Метрики и Директа: номер счётчика указан в параметрах кампании, включена разметка для ссылок.
-                        </p>
-                        <button class="task-button">Добавить ответственного</button>
-                    </li>
-                </ul> 
-                <button class="content-button"> + Добавить задачу</button>
-            </li>
-            <li class="content-item">
-                <h2 class="content-title" id="backlog" @click="setActive">
-                    <span>Разработка</span>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M7 10L11.3753 13.5002C11.7405 13.7924 12.2595 13.7924 12.6247 13.5002L17 10" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round"/>
-                    </svg>
-                </h2>
-                <ul class="content-sublist sublist" @drop="dropItem($event, index)" @dragover.prevent>
-                    <li class="sublist-item task" :draggable="true" @dragstart="dragItem($event, item, index, itemIndex)">
-                        <h3 class="task-title">
-                            <span>Внедрение Я. Метрики</span>
-                            <div class="task-menu">
-                                <span class="task-btn" @click="checkMenu">...</span>
-                                <ul class="task-edit edit">
-                                    <li class="edit-item">
-                                        <a href="#">Редактировать</a>
-                                    </li>
-                                    <li class="edit-item">
-                                        <button>Переместить</button>
-                                    </li>
-                                    <li class="edit-item">
-                                        <button>Удалить</button>
-                                    </li>
-                                </ul>
-                            </div>
-                        </h3>
-                        <p class="task-text">
-                            Настроить интеграция Метрики и Директа: номер счётчика указан в параметрах кампании, включена разметка для ссылок.
-                        </p>
-                        <a href="#" class="task-link">Иванов И.А.</a>
-                    </li>
-                    <li class="sublist-item task" :draggable="true" @dragstart="dragItem($event, item, index, itemIndex)">
-                        <h3 class="task-title">
-                            <span>Внедрение Я. Метрики</span>
-                            <div class="task-menu">
-                                <span class="task-btn">...</span>
-                            </div>
-                        </h3>
-                        <p class="task-text">
-                            Настроить интеграция Метрики и Директа: номер счётчика указан в параметрах кампании, включена разметка для ссылок.
-                        </p>
-                        <button class="task-button">Добавить ответственного</button>
-                    </li>
-                </ul> 
-                <button class="content-button"> + Добавить задачу</button>
-            </li>
-            <li class="content-item">
-                <h2 class="content-title" id="backlog" @click="setActive">
-                    <span>Разработка</span>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M7 10L11.3753 13.5002C11.7405 13.7924 12.2595 13.7924 12.6247 13.5002L17 10" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round"/>
-                    </svg>
-                </h2>
-                <ul class="content-sublist sublist" @drop="dropItem" @dragover.prevent>
-                    <li class="sublist-item task" :draggable="true" @dragstart="dragItem">
-                        <h3 class="task-title">
-                            <span>Внедрение Я. Метрики</span>
-                            <div class="task-menu">
-                                <span class="task-btn" @click="checkMenu">...</span>
-                                <ul class="task-edit edit">
-                                    <li class="edit-item">
-                                        <a href="#">Редактировать</a>
-                                    </li>
-                                    <li class="edit-item">
-                                        <button>Переместить</button>
-                                    </li>
-                                    <li class="edit-item">
-                                        <button>Удалить</button>
-                                    </li>
-                                </ul>
-                            </div>
-                        </h3>
-                        <p class="task-text">
-                            Настроить интеграция Метрики и Директа: номер счётчика указан в параметрах кампании, включена разметка для ссылок.
-                        </p>
-                        <a href="#" class="task-link">Иванов И.А.</a>
-                    </li>
-                    <li class="sublist-item task" :draggable="true" @dragstart="dragItem">
-                        <h3 class="task-title">
-                            <span>Внедрение Я. Метрики</span>
-                            <div class="task-menu">
-                                <span class="task-btn">...</span>
-                            </div>
-                        </h3>
-                        <p class="task-text">
-                            Настроить интеграция Метрики и Директа: номер счётчика указан в параметрах кампании, включена разметка для ссылок.
-                        </p>
-                        <button class="task-button">Добавить ответственного1111</button>
+                        <a href="#" class="task-link">{{ task.performer.name }}</a>
                     </li>
                 </ul> 
                 <button class="content-button"> + Добавить задачу</button>
@@ -146,11 +56,99 @@
     export default {
         data() {
             return {
-                lists : [
-                    ['Item 1', 'Item 2'],
-                    ['Item 3', 'Item 4'],
-                    ['Item 5', 'Item 6'],
+                data: [
+                    {
+                        code: 'backlog',
+                        title: 'Беклог',
+                        tasks: [
+                            {
+                                code: 'test',
+                                id: 1,
+                                title: 'Работа битрикс24',
+                                description: 'Как говорится ничего не говорится.....',
+                                performer: {
+                                    id: 2,
+                                    name: 'Владимир Иваныч'
+                                },
+                                creator: {
+                                    id: 1,
+                                    name: 'Создатель'
+                                },
+                            },
+                            {
+                                code: 'test-2',
+                                id: 2,
+                                title: 'Работа БУС',
+                                description: 'Как говорится ничего не говорится.....',
+                                performer: {
+                                    id: 3,
+                                    name: 'Владимир Романович'
+                                },
+                                creator: {
+                                    id: 1,
+                                    name: 'Создатель'
+                                },
+                            },
+                            {
+                                code: 'test-3',
+                                id: 3,
+                                title: 'Девопс',
+                                description: 'Как говорится ничего не говорится.....',
+                                performer: {
+                                    id: 3,
+                                    name: 'Владимир Романович'
+                                },
+                                creator: {
+                                    id: 1,
+                                    name: 'Создатель'
+                                },
+                            },
+                        ],
+                    },
+                    {
+                        code: 'development',
+                        title: 'В работе',
+                        tasks: [
+                            {
+                                code: 'tester',
+                                id: 23,
+                                title: 'Настройка сервера',
+                                description: 'Как говорится ничего не говорится.....',
+                                performer: {
+                                    id: 2,
+                                    name: 'Владимир Иваныч'
+                                },
+                                creator: {
+                                    id: 1,
+                                    name: 'Создатель'
+                                },
+                            },
+                        ],
+                    },
+                    {
+                        code: 'finish',
+                        title: 'Финиш',
+                        tasks: [
+                            {
+                                code: 'testing',
+                                id: 42,
+                                title: 'Покушать',
+                                description: 'Как говорится ничего не говорится.....',
+                                performer: {
+                                    id: 2,
+                                    name: 'Владимир Иваныч'
+                                },
+                                creator: {
+                                    id: 1,
+                                    name: 'Создатель'
+                                },
+                            },
+                        ],
+                    },
                 ],
+                dragItem: '',
+                dropList: [],
+                currentList: 0,
             }
         },
         methods: {
@@ -162,16 +160,58 @@
             checkMenu(event) {
                 event.target.parentNode.classList.toggle('active');
             },
-            dragItem(event, item, sourceListIndex, sourceItemIndex) {
-                event.dataTransfer.setData('text/plain', JSON.stringify({ item, sourceListIndex, sourceItemIndex }));
+            getTasks() {
+                //this.data used
             },
-            dropItem(event, targetListIndex) {
-                const data = JSON.parse(event.dataTransfer.getData('text/plain'));
-                lists.value[data.sourceListIndex].splice(data.sourceItemIndex, 1);
+            drag(event) {
+                this.dragItem = event.target;
+            },
+            drop() {
+                this.getLists().forEach(item => {
+                    item.classList.remove('drag');
+                });
 
-                lists.value[targetListIndex].push(data.item);
+                let currentItem;
+                let currentStatus;
+                
+                this.data.forEach((status, index) => {
+                    const indexTask = status.tasks.findIndex(task => task.id === +this.dragItem.id);
+                    
+                    if (indexTask !== -1) {
+                        currentItem = indexTask;
+                        currentStatus = index;
+                    }
+                })
+                const newData = this.data;
+                
+                const deleteItem = newData[currentStatus].tasks.splice(currentItem, 1)[0];
+                
+                newData[this.currentList].tasks.unshift(deleteItem);
+                this.data = newData;
+                //тут отправляй запрос
+            },
+            dragEnter(index) {
+                this.getLists()[index].classList.add('drag');
+                this.currentList = index;
+            },
+            getLists() {
+                if (this.dropList.count) {
+                    return this.dropList;
+                }
+                this.dropList = document.querySelectorAll('.sublist');
+                return this.dropList;
+            },
+            dragEnd(){
+                this.getLists().forEach(item => {
+                    item.classList.remove('drag');
+                });
             }
+            
+        },
+        mounted() {
+            this.getTasks();
         }
+
     }
 </script>
 <style lang="scss">
@@ -211,8 +251,12 @@
             flex-direction: column;
             gap: 20px;
         }
+        &-sublist.drag {
+            opacity: .3;
+        }
         .sublist {
             margin-bottom: 40px;
+            min-height: 250px;
             &-item {
                 box-shadow: 0px 1px 4px 0px #8B8B8B4F;
                 border-radius: 30px;
