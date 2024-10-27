@@ -149,7 +149,6 @@ export default {
         this.closeModal();
       } catch (err) {
         const errors = err.response?.data?.message;
-        console.log(errors);
       }
     },
   },

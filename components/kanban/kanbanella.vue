@@ -40,7 +40,7 @@
             :id="task.id"
           >
             <h3 class="task-title">
-              <span v-html="task.title" />
+              <span>{{ task.title }}</span>
               <div class="task-menu">
                 <span class="task-btn" @click="checkMenu">...</span>
                 <ul class="task-edit edit">
