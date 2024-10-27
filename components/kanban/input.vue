@@ -4,6 +4,8 @@
             type="search" 
             placeholder="Поиск..."
             :class="openInput ? 'active' : ''" 
+            @input="inputQuery"
+            :value="query"
             />
         <svg 
             width="24" 
@@ -45,6 +47,7 @@
         data() {
             return {
                 openInput: false,
+                query: '',
             }
         },
         methods: {
@@ -53,8 +56,21 @@
                     this.openInput = param;
                     this.$emit('checkInput', param);
                 }
+            },
+            inputQuery(event) {
+                this.query = event.target.value;
+                this.$emit('update:query', event.target.value);
             }
-        }
+        },
+        // computed: {
+        //     dataQuery() {
+        //         const newList = this.dataTasks.map(status => {
+        //             return status.tasks.filter(task => task.title.toLowerCase().includes(this.query.toLowerCase()));
+        //         })
+
+        //         this.$emit('searchList', this.newList);
+        //     },
+        // }
     }
 </script>
 <style lang="scss">

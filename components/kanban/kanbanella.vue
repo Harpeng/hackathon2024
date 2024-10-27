@@ -141,7 +141,15 @@
             
         },
         mounted() {
-            this.data = this.dataTasks;
+            this.data = [...this.dataTasks];
+        },
+        watch: {
+            dataTasks: {
+                immediate: true,
+                handler(newData) {
+                    this.data = newData;
+                }
+            }
         }
 
     }
