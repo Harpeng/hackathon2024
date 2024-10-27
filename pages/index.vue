@@ -1,22 +1,26 @@
 
 <template>
      <section class="kanban">
-        <KanbanHeader :dataTasks="data"></KanbanHeader>
-        <KanbanKanbanella :dataTasks="data"></KanbanKanbanella>
+        <KanbanHeader 
+            :dataTasks="data" 
+            @update-query="queryHandler"
+            ></KanbanHeader>
+        <KanbanKanbanella :dataTasks="tasksAfterSearch"></KanbanKanbanella>
      </section>
 </template>
 
 <script setup>
 import KanbanHeader from '@/components/kanban/header.vue';
-import KanbanKanbanella from '@@/components/kanban/kanbanella.vue';
+import KanbanKanbanella from '@/components/kanban/kanbanella.vue';
 
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 definePageMeta({
   middleware: "auth",
 });
 
 const tasks = ref([]);
+const query = ref('');
 const data = [
                     {
                         code: 'backlog',
@@ -108,9 +112,27 @@ const data = [
                     },
                 ];
 
-const getTasks = async (val) => {
-    tasks.value = val;
-}
+
+const queryHandler = (param) => {
+    query.value = param;
+}                
+const tasksAfterSearch = computed(() => {
+    if (query.value.trim() === '') {
+        return [...data];
+    }
+    return data.map(status => {
+        const filteredTasks = status.tasks.filter(task => 
+            task.title.toLowerCase().includes(query.value.toLowerCase())
+        );
+        return {
+            code: status.code,
+            title: status.title,
+            tasks: filteredTasks
+        }
+    })
+})
+
+
 </script>
 <style lang="scss">
 .kanban {

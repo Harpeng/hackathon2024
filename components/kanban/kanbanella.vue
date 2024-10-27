@@ -75,7 +75,7 @@
                 }
             },
             checkMenu(event) {
-                event.target.parentNode.classList.toggle('active');
+                event.currentTarget.parentNode.classList.toggle('active');
             },
             drag(event) {
                 this.dragItem = event.target;
@@ -141,7 +141,15 @@
             
         },
         mounted() {
-            this.data = this.dataTasks;
+            this.data = [...this.dataTasks];
+        },
+        watch: {
+            dataTasks: {
+                immediate: true,
+                handler(newData) {
+                    this.data = newData;
+                }
+            }
         }
 
     }
@@ -260,6 +268,7 @@
                 flex-direction: column;
                 gap: 6px;
                 background: $white;
+                z-index: 2;
             }
             .edit {
                 &-item {
