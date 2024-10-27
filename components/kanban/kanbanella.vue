@@ -1,240 +1,247 @@
 <template>
-  <div class="content">
-    <ul class="content-list">
-      <li
-        class="content-item"
-        v-for="(status, index) in data"
-        :key="status.code"
-      >
-        <h2 class="content-title" @click="setActive">
-          <span>{{ status.title }}</span>
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M7 10L11.3753 13.5002C11.7405 13.7924 12.2595 13.7924 12.6247 13.5002L17 10"
-              stroke="#9E9E9E"
-              stroke-width="1.5"
-              stroke-linecap="round"
-            />
-          </svg>
-        </h2>
-        <ul
-          class="content-sublist sublist"
-          @drop.prevent="drop"
-          @dragover.prevent
-          @dragenter="dragEnter(index)"
-          @dragend="dragEnd"
-          :id="status.code"
-        >
-          <li
-            class="sublist-item task"
-            v-for="task in status.tasks"
-            :key="task.code"
-            :draggable="true"
-            @dragstart="drag"
-            :id="task.id"
-          >
-            <h3 class="task-title">
-              <span>{{ task.title }}</span>
-              <div class="task-menu">
-                <span class="task-btn" @click="checkMenu">...</span>
-                <ul class="task-edit edit">
-                  <li class="edit-item">
-                    <button @click="openModal(task.id)">Редактировать</button>
-                  </li>
-                  <li class="edit-item" v-if="index !== data.length - 1">
-                    <button @click="taskMove(index, task.id)">
-                      Переместить
-                    </button>
-                  </li>
-                  <li class="edit-item">
-                    <button>Удалить</button>
-                  </li>
-                </ul>
-              </div>
-            </h3>
-            <p class="task-text">
-              {{ task.description }}
-            </p>
-            <a href="#" class="task-link">{{ task.performer.name }}</a>
-            <teleport to="body">
-              <MainModal
-                v-if="modalOpen === true"
-                title="Редактирование"
-                variantLeftBtn="full-purple"
-                variantRightBtn="link"
-                textColorLeftBtn="#ffff"
-                textColorRightBtn="#a64aed"
-                textLeftBtn="Cохранить"
-                textRightBtn="Отменить"
-                :modalOpen="modalOpen"
-                :titleContent="titleContent"
+    <div class="content">
+        <ul class="content-list">
+            <li class="content-item" v-for="(status, index) in data" :key="status.code">
+                <h2 class="content-title" @click="setActive">
+                    <span>{{ status.title }}</span>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7 10L11.3753 13.5002C11.7405 13.7924 12.2595 13.7924 12.6247 13.5002L17 10" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </h2>
+                <ul 
+                    class="content-sublist sublist"
+                    @drop.prevent="drop"
+                    @dragover.prevent
+                    @dragenter="dragEnter(index)"
+                    @dragend="dragEnd"
+                    :id="status.code"
+                    >
+                    <li 
+                        class="sublist-item task"
+                        v-for="task in status.items" 
+                        :key="task.code"
+                        :draggable="true"
+                        @dragstart="drag"
+                        :id="task.id"
+                        >
+                        <h3 class="task-title">
+                            <span>{{ task.title }}</span>
+                            <div class="task-menu">
+                                <span class="task-btn" @click="checkMenu">...</span>
+                                <ul class="task-edit edit">
+                                    <li class="edit-item">
+                                        <button @click="openModal(task.id)">Редактировать</button>
+                                    </li>
+                                    <li class="edit-item" v-if="index !== data.length - 1">
+                                        <button @click="taskMove(index, task.id)">Переместить</button>
+                                    </li>
+                                    <li class="edit-item">
+                                        <button>Удалить</button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </h3>
+                        <p class="task-text">
+                            {{ task.description }}
+                        </p>
+                        <a href="#" class="task-link">{{ task.performer.name }}</a>
+                        <teleport to="body">
+                            <MainModal
+                                v-if="modalOpen === true"
+                                title="Редактирование"
+                                variantLeftBtn="full-purple"
+                                variantRightBtn="link"
+                                textColorLeftBtn="#ffff"
+                                textColorRightBtn="#a64aed"
+                                textLeftBtn="Cохранить"
+                                textRightBtn="Отменить"
+                                :modalOpen="modalOpen"
+                                :titleContent="titleContent"
                 :textContent="textContent"
                 :id="Number(selectedCardId)"
                 type="register"
                 apiMethod="PATCH"
                 @isCloseModal="closeModal(task.id)"
-              >
-                <Redactor
+                            >
+                                <Redactor
                   @inputTitle="getTitle"
                   @input="getText"
                 />
-              </MainModal>
-            </teleport>
-          </li>
+                            </MainModal>
+                        </teleport>
+                    </li>
+                </ul> 
+                <button class="content-button"> + Добавить задачу</button>
+            </li>
         </ul>
-        <button class="content-button">+ Добавить задачу</button>
-      </li>
-    </ul>
   </div>
 </template>
 <script>
 import MainModal from "@/components/ui/MainModal.vue";
-import Redactor from "@/components/Redactor.vue";
+    import Redactor from "@/components/Redactor.vue";
 export default {
-  components: { MainModal, Redactor },
-  props: {
-    dataTasks: {
-      type: Array,
-      required: true,
-    },
-  },
-  data() {
-    return {
-      data: [],
-      dragItem: "",
-      dropList: [],
-      currentList: 0,
-      modalOpen: false,
-      selectedCardId: null,
-      titleContent: "",
+        components: { MainModal, Redactor },
+        props: {
+            dataTasks: {
+                type: Array,
+                required: true,
+            }
+        },
+        data() {
+            return {
+                data: [],
+                dragItem: "",
+                dropList: [],
+                currentList: 0,
+                modalOpen: false,
+                selectedCardId: null,
+              titleContent: "",
       textContent: "",
-    };
-  },
-  watch: {
-    route(newVal) {
-      newVal === "true" ? (this.modalOpen = true) : (this.modalOpen = true);
-      this.selectedCardId = newVal ? this.$route.query.id : null;
-    },
-    dataTasks: {
-      immediate: true,
-      handler(newData) {
-        this.data = newData;
-      },
-    },
-  },
-  methods: {
-    getTitle(title) {
+    }
+        },
+        watch: {
+            route(newVal) {
+                newVal === "true" ? (this.modalOpen = true) : (this.modalOpen = true);
+                this.selectedCardId = newVal ? this.$route.query.id : null;
+                },
+                dataTasks: {
+                immediate: true,
+                handler(newData) {
+                    this.data = newData;
+                },
+            },
+            dataTasks: {
+                immediate: true,
+                handler(newData) {
+                    this.data = [...newData];
+                }
+            }
+        },
+        methods: {
+            getTitle(title) {
       this.titleContent = title;
     },
     getText(text) {
         this.textContent = text;
     },
     openModal(id) {
-      this.selectedCardId = id;
-      this.modalOpen = true;
-      document.body.style.overflowY = "hidden";
-      this.$router.push({
-        query: { ...this.$route.query, modal: true, id },
-      });
-    },
-    closeModal() {
-      this.modalOpen = false;
-      this.selectedCardId = null;
-      document.body.style.overflowY = "scroll";
-      this.$router.push({
-        query: { ...this.$route.query, modal: undefined, id: undefined },
-      });
-    },
-    setActive(event) {
-      if (document.body.clientWidth <= 768) {
-        event.target.parentNode.classList.toggle("active");
-      }
-    },
-    checkMenu(event) {
-      event.currentTarget.parentNode.classList.toggle("active");
-    },
-    drag(event) {
-      this.dragItem = event.target;
-    },
-    //кидать запрос на изменение статуса
-    drop() {
-      this.getLists().forEach((item) => {
-        item.classList.remove("drag");
-      });
+                this.selectedCardId = id;
+                this.modalOpen = true;
+                document.body.style.overflowY = "hidden";
+                this.$router.push({
+                    query: { ...this.$route.query, modal: true, id },
+                });
+            },
+            closeModal() {
+                this.modalOpen = false;
+                this.selectedCardId = null;
+                document.body.style.overflowY = "scroll";
+                this.$router.push({
+                    query: { ...this.$route.query, modal: undefined, id: undefined },
+                });
+            },
+            getToken() {
+                return localStorage.getItem('user').replace(/"/g, '');
+            },
+            setActive(event) {
+                if (document.body.clientWidth <= 768) {
+                    event.target.parentNode.classList.toggle("active");
+                }
+            },
+            checkMenu(event) {
+                event.currentTarget.parentNode.classList.toggle("active");
+            },
+            drag(event) {
+                this.dragItem = event.target;
+            },
+            drop() {
+                this.getLists().forEach(item => {
+                    item.classList.remove("drag");
+                });
 
-      let currentItem;
-      let currentStatus;
+                let currentItem;
+                let currentStatus;
+                
+                this.data.forEach((status, index) => {
+                    const indexTask = status.items.findIndex(task => task.id === +this.dragItem.id);
+                    
+                    if (indexTask !== -1) {
+                        currentItem = indexTask;
+                        currentStatus = index;
+                    }
+                })
+                const newData = this.data;
+                
+                const deleteItem = newData[currentStatus].items.splice(currentItem, 1)[0];
+                
+                newData[this.currentList].items.unshift(deleteItem);
+                this.data = newData;
 
-      this.data.forEach((status, index) => {
-        const indexTask = status.tasks.findIndex(
-          (task) => task.id === +this.dragItem.id
-        );
+                $fetch('https://coco-jamboo.ru/api/tasks/' + deleteItem.id, {
+                    headers: {
+                        authorization: 'Bearer ' + this.getToken(),
+                    },
+                    body: {
+                        task_status_id: newData[this.currentList].id
+                    },
+                    method: 'patch'
+                })
+            },
+            dragEnter(index) {
+                this.getLists()[index].classList.add('drag');
+                this.currentList = index;
+            },
+            getLists() {
+                if (this.dropList.count) {
+                    return this.dropList;
+                }
+                this.dropList = document.querySelectorAll('.sublist');
+                return this.dropList;
+            },
+            dragEnd(){
+                this.getLists().forEach(item => {
+                    item.classList.remove('drag');
+                });
+            },
+            taskMove(currentStatus, taskId) {
+                let currentItem;
 
-        if (indexTask !== -1) {
-          currentItem = indexTask;
-          currentStatus = index;
-        }
-      });
-      const newData = this.data;
+                this.data.forEach((status) => {
+                    const indexTask = status.items.findIndex(task => task.id === taskId);
+                    
+                    if (indexTask !== -1) {
+                        currentItem = indexTask;
+                    }
+                })
+                const newData = this.data;
+                
+                const deleteItem = newData[currentStatus].items.splice(currentItem, 1)[0];
+                
+                newData[currentStatus + 1].items.unshift(deleteItem);
+                this.data = [...newData];
+                $fetch('https://coco-jamboo.ru/api/tasks/' + deleteItem.id, {
+                    headers: {
+                        authorization: 'Bearer ' + this.getToken(),
+                    },
+                    body: {
+                        task_status_id: newData[currentStatus + 1].id
+                    },
+                    method: 'patch'
+                })
+            },
+            
+        },
+        mounted() {
+            this.data = [...this.dataTasks];
+            if (this.$route.query.modal && this.$route.query.id) {
+                this.selectedCardId = this.$route.query.id;
+                this.openModal(this.$route.query.id);
 
-      const deleteItem = newData[currentStatus].tasks.splice(currentItem, 1)[0];
-
-      newData[this.currentList].tasks.unshift(deleteItem);
-      this.data = newData;
-    },
-    dragEnter(index) {
-      this.getLists()[index].classList.add("drag");
-      this.currentList = index;
-    },
-    getLists() {
-      if (this.dropList.count) {
-        return this.dropList;
-      }
-      this.dropList = document.querySelectorAll(".sublist");
-      return this.dropList;
-    },
-    dragEnd() {
-      this.getLists().forEach((item) => {
-        item.classList.remove("drag");
-      });
-    },
-    //кидать запрос на изменение статуса
-    taskMove(currentStatus, taskId) {
-      let currentItem;
-
-      this.data.forEach((status) => {
-        const indexTask = status.tasks.findIndex((task) => task.id === taskId);
-
-        if (indexTask !== -1) {
-          currentItem = indexTask;
-        }
-      });
-      const newData = this.data;
-
-      const deleteItem = newData[currentStatus].tasks.splice(currentItem, 1)[0];
-
-      newData[currentStatus + 1].tasks.unshift(deleteItem);
-      this.data = newData;
-    },
-  },
-  mounted() {
-    this.data = [...this.dataTasks];
-    console.log(this.data);
-    if (this.$route.query.modal && this.$route.query.id) {
-      this.selectedCardId = this.$route.query.id;
-      this.openModal(this.$route.query.id);
-
-      if (document.body.clientWidth <= 768) {
-      }
+                if (document.body.clientWidth <= 768) {
+                }
+            }
+        },
     }
-  },
-};
 </script>
 <style lang="scss">
 .content {
