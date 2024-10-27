@@ -17,7 +17,7 @@ export default {
 <style lang="scss">
 .register {
   height: 100vh;
-  padding: 100px 15px;
+  padding: 50px 15px;
 
   @include media-xs-min {
     padding: 5vw 15px;
