@@ -54,8 +54,8 @@ export default {
   },
   computed: {
     getUser() {
-      return this.currentUser !== "" ? this.currentUser : "Все юзеры";
-    },
+        return this.currentUser !== "" ? this.currentUser : 'Все юзеры'
+    }
   },
   methods: {
     getToken() {
@@ -68,6 +68,8 @@ export default {
         },
       });
       this.list = data;
+      console.log(this.list);
+      this.currentUser = this.list[0].name;
       this.selectId = this.list[0].id;
       this.$emit("responsible", this.selectId);
     },
@@ -76,9 +78,10 @@ export default {
     },
     select(event) {
       this.selectId = +event.currentTarget.id;
+      document.querySelector(".dropdown-title span").innerHTML =
+        event.currentTarget.innerHTML;
 
-      const titleElement = document.querySelector(".dropdown-title span");
-      this.currentUser = event.currentTarget.innerHTML;
+        this.currentUser = event.currentTarget.innerHTML;
       document.querySelector(".dropdown").classList.remove("active");
       this.$emit("responsible", this.selectId);
     },

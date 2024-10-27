@@ -101,7 +101,6 @@ onMounted(async () => {
     })
     tasks.value = data.value.data;
 
-    console.log(data)
 })
 
 </script>
