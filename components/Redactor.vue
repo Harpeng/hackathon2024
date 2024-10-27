@@ -8,15 +8,16 @@
     </div>
     <div class="redactor__author-block">
       <span class="paragraph paragraph_main">Исполнитель</span>
-      <Input class="redactor__author" placeholder="Введите ФИО исполнителя" />
+      <Dropdown isRedactor @responsible="select" />
     </div>
   </div>
 </template>
 <script>
 import Input from "@/components/ui/Input.vue";
 import Quill from "quill";
+import Dropdown from "@/components/ui/Dropdown.vue";
 export default {
-  components: { Input },
+  components: { Input, Dropdown },
   data() {
     return {
       quillInstance: null,
@@ -58,7 +59,8 @@ export default {
           "block";
       }
       
-      this.editorContent = this.quillInstance.root.textContent.trim();
+      const htmlContent = this.quillInstance.root.innerHTML;
+      this.editorContent = htmlContent;
       this.$emit("inputText", this.editorContent);
     });
 
@@ -76,6 +78,11 @@ export default {
   beforeUnmount() {
     this.quillInstance = null;
   },
+  methods: {
+    select(userid) {
+        this.$emit("responsible", userid);
+    }
+  }
 };
 </script>
 <style lang="scss">

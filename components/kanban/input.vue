@@ -54,6 +54,10 @@
             checkInput(param) {
                 if (document.body.clientWidth < 768) {
                     this.openInput = param;
+                    
+                    if (!this.openInput) {
+                        this.query = '';
+                    }
                     this.$emit('checkInput', param);
                 }
             },
@@ -62,15 +66,6 @@
                 this.$emit('update:query', event.target.value);
             }
         },
-        // computed: {
-        //     dataQuery() {
-        //         const newList = this.dataTasks.map(status => {
-        //             return status.tasks.filter(task => task.title.toLowerCase().includes(this.query.toLowerCase()));
-        //         })
-
-        //         this.$emit('searchList', this.newList);
-        //     },
-        // }
     }
 </script>
 <style lang="scss">

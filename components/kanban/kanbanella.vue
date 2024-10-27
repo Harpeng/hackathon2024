@@ -58,9 +58,7 @@
                 </ul>
               </div>
             </h3>
-            <p class="task-text">
-              {{ task.body }}
-            </p>
+            <p class="task-text" v-html="task.body" />
             <a href="#" class="task-link">{{ task.performer.name }}</a>
             <teleport to="body">
               <MainModal
@@ -77,11 +75,12 @@
                 :textContent="textContent"
                 :status="status.id"
                 :id="Number(selectedCardId)"
+                :userId="userId"
                 type="register"
                 apiMethod="PATCH"
                 @isCloseModal="closeModal(task.id)"
               >
-                <Redactor @inputTitle="getTitle" @inputText="getText" />
+                <Redactor @inputTitle="getTitle" @inputText="getText" @responsible="getUserId" />
               </MainModal>
             </teleport>
           </li>
@@ -112,6 +111,7 @@ export default {
       selectedCardId: null,
       titleContent: "",
       textContent: "",
+      userId: null,
     };
   },
   watch: {
@@ -146,6 +146,9 @@ export default {
     },
     getText(text) {
       this.textContent = text;
+    },
+    getUserId(userId) {
+        this.userId = userId;
     },
     openModal(id) {
       this.selectedCardId = id;

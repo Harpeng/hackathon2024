@@ -19,12 +19,14 @@
       </div>
       <div class="main-modal__footer">
         <Button
+          v-if="variantLeftBtn !== ''"
           :variant="variantLeftBtn"
           :textColor="textColorLeftBtn"
           :title="textLeftBtn"
           @click="sendData"
         />
         <Button
+          v-if="variantRightBtn !== ''"
           :variant="variantRightBtn"
           :textColor="textColorRightBtn"
           :title="textRightBtn"
@@ -81,8 +83,8 @@ export default {
       default: "",
     },
     status: {
-        type: Number,
-        default: null,
+      type: Number,
+      default: null,
     },
     type: {
       type: String,
@@ -92,6 +94,10 @@ export default {
       },
     },
     id: {
+      type: Number,
+      default: null,
+    },
+    userId: {
       type: Number,
       default: null,
     },
@@ -138,11 +144,11 @@ export default {
               title: this.titleContent,
               body: this.textContent,
               task_status_id: this.status,
+              performer_id: this.userId,
             },
           }
         );
-        this.$forceUpdate();
-        this.closeModal()
+        this.closeModal();
       } catch (err) {
         const errors = err.response?.data?.message;
         console.log(errors);
