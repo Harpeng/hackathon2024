@@ -69,6 +69,9 @@
             }
         },
         methods: {
+            getToken() {
+                return localStorage.getItem('user').replace(/"/g, '');
+            },
             setActive(event) {
                 if (document.body.clientWidth <= 768) {
                     event.target.parentNode.classList.toggle('active');
@@ -80,7 +83,6 @@
             drag(event) {
                 this.dragItem = event.target;
             },
-            //кидать запрос на изменение статуса
             drop() {
                 this.getLists().forEach(item => {
                     item.classList.remove('drag');
@@ -103,6 +105,16 @@
                 
                 newData[this.currentList].items.unshift(deleteItem);
                 this.data = newData;
+
+                $fetch('https://coco-jamboo.ru/api/tasks/' + deleteItem.id, {
+                    headers: {
+                        authorization: 'Bearer ' + this.getToken(),
+                    },
+                    body: {
+                        task_status_id: newData[this.currentList].id
+                    },
+                    method: 'patch'
+                })
             },
             dragEnter(index) {
                 this.getLists()[index].classList.add('drag');
@@ -120,7 +132,6 @@
                     item.classList.remove('drag');
                 });
             },
-            //кидать запрос на изменение статуса
             taskMove(currentStatus, taskId) {
                 let currentItem;
 
@@ -137,6 +148,15 @@
                 
                 newData[currentStatus + 1].items.unshift(deleteItem);
                 this.data = [...newData];
+                $fetch('https://coco-jamboo.ru/api/tasks/' + deleteItem.id, {
+                    headers: {
+                        authorization: 'Bearer ' + this.getToken(),
+                    },
+                    body: {
+                        task_status_id: newData[currentStatus + 1].id
+                    },
+                    method: 'patch'
+                })
             },
             
         },
