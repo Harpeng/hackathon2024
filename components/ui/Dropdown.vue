@@ -1,9 +1,11 @@
 <template>
   <div class="dropdown-container">
-    <p :class="{'dropdown-text-invisible': isRedactor === true }">Ответственный:</p>
+    <p :class="{ 'dropdown-text-invisible': isRedactor === true }">
+      Ответственный:
+    </p>
     <div :class="['dropdown', activeDropDown ? 'active' : '']">
       <div class="dropdown-title" @click="checkDropDown">
-        <span>Все юзеры</span>
+        <span>{{ getUser }}</span>
         <svg
           width="24"
           height="24"
@@ -20,13 +22,7 @@
         </svg>
       </div>
       <ul class="dropdown-list">
-                <li 
-                    class="dropdown-item" 
-                    :id="0"
-                    @click="select"
-                    >
-                    Все юзеры
-                </li>
+        <li class="dropdown-item" :id="0" @click="select">Все юзеры</li>
         <li
           class="dropdown-item"
           v-for="item in list"
@@ -56,6 +52,11 @@ export default {
       activeDropDown: false,
     };
   },
+  computed: {
+    getUser() {
+      return this.currentUser !== "" ? this.currentUser : "Все юзеры";
+    },
+  },
   methods: {
     getToken() {
       return localStorage.getItem("user").replace(/"/g, "");
@@ -67,8 +68,6 @@ export default {
         },
       });
       this.list = data;
-      console.log(this.list)
-      this.currentUser = this.list[0].name;
       this.selectId = this.list[0].id;
       this.$emit("responsible", this.selectId);
     },
@@ -77,12 +76,11 @@ export default {
     },
     select(event) {
       this.selectId = +event.currentTarget.id;
-      document.querySelector(".dropdown-title span").innerHTML =
-        event.currentTarget.innerHTML;
+
+      const titleElement = document.querySelector(".dropdown-title span");
+      this.currentUser = event.currentTarget.innerHTML;
       document.querySelector(".dropdown").classList.remove("active");
-      this.currentUser = 
       this.$emit("responsible", this.selectId);
-      console.log('hey', this.selectId)
     },
   },
 
