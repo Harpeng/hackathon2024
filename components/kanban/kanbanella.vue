@@ -75,8 +75,8 @@
                 :modalOpen="modalOpen"
                 @isCloseModal="closeModal(task.id)"
               >
-            sdsds
-            </MainModal>
+                sdsds
+              </MainModal>
             </teleport>
           </li>
         </ul>
@@ -110,6 +110,12 @@ export default {
       newVal === "true" ? (this.modalOpen = true) : (this.modalOpen = true);
       this.selectedCardId = newVal ? this.$route.query.id : null;
     },
+    dataTasks: {
+      immediate: true,
+      handler(newData) {
+        this.data = newData;
+      },
+    },
   },
   methods: {
     openModal(id) {
@@ -134,7 +140,7 @@ export default {
       }
     },
     checkMenu(event) {
-      event.target.parentNode.classList.toggle("active");
+      event.currentTarget.parentNode.classList.toggle("active");
     },
     drag(event) {
       this.dragItem = event.target;
@@ -201,7 +207,7 @@ export default {
     },
   },
   mounted() {
-    this.data = this.dataTasks;
+    this.data = [...this.dataTasks];
     if (this.$route.query.modal && this.$route.query.id) {
       this.selectedCardId = this.$route.query.id;
       this.openModal(this.$route.query.id);
