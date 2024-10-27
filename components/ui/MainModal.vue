@@ -19,15 +19,19 @@
       </div>
       <div class="main-modal__footer">
         <Button
+          v-if="variantLeftBtn !== ''"
           :variant="variantLeftBtn"
           :textColor="textColorLeftBtn"
           :title="textLeftBtn"
+          @click="sendData"
         />
         <Button
+          v-if="variantRightBtn !== ''"
           :variant="variantRightBtn"
           :textColor="textColorRightBtn"
           :title="textRightBtn"
           modalBtn
+          @click="closeModal"
         />
       </div>
     </div>
@@ -70,16 +74,85 @@ export default {
       type: String,
       required: true,
     },
+    titleContent: {
+      type: String,
+      default: "",
+    },
+    textContent: {
+      type: String,
+      default: "",
+    },
+    status: {
+      type: Number,
+      default: null,
+    },
+    type: {
+      type: String,
+      default: "",
+      validator(val) {
+        return ["register"].includes(val);
+      },
+    },
+    id: {
+      type: Number,
+      default: null,
+    },
+    userId: {
+      type: Number,
+      default: null,
+    },
+    apiMethod: {
+      type: String,
+      default: "",
+    },
   },
   data() {
     return {
       isModal: this.modalOpen,
+      data: null,
     };
   },
   methods: {
     closeModal() {
       this.isModal = false;
       this.$emit("isCloseModal", this.isModal);
+    },
+    getToken() {
+      return localStorage.getItem("user").replace(/"/g, "");
+    },
+    async sendData() {
+      try {
+        switch (true) {
+          case this.type === "register":
+            this.data = {
+              title: this.titleContent,
+              body: this.textContent,
+              task_status_id: this.id,
+            };
+          default:
+            break;
+        }
+        const { res } = await $fetch(
+          `https://coco-jamboo.ru/api/tasks/${this.id}`,
+          {
+            method: this.apiMethod,
+            headers: {
+              authorization: "Bearer " + this.getToken(),
+              contentType: "application/json",
+            },
+            body: {
+              title: this.titleContent,
+              body: this.textContent,
+              task_status_id: this.status,
+              performer_id: this.userId,
+            },
+          }
+        );
+        this.closeModal();
+      } catch (err) {
+        const errors = err.response?.data?.message;
+        console.log(errors);
+      }
     },
   },
 };
