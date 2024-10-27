@@ -18,7 +18,7 @@
                     >
                     <li 
                         class="sublist-item task"
-                        v-for="task in status.tasks" 
+                        v-for="task in status.items" 
                         :key="task.code"
                         :draggable="true"
                         @dragstart="drag"
@@ -90,7 +90,7 @@
                 let currentStatus;
                 
                 this.data.forEach((status, index) => {
-                    const indexTask = status.tasks.findIndex(task => task.id === +this.dragItem.id);
+                    const indexTask = status.items.findIndex(task => task.id === +this.dragItem.id);
                     
                     if (indexTask !== -1) {
                         currentItem = indexTask;
@@ -99,9 +99,9 @@
                 })
                 const newData = this.data;
                 
-                const deleteItem = newData[currentStatus].tasks.splice(currentItem, 1)[0];
+                const deleteItem = newData[currentStatus].items.splice(currentItem, 1)[0];
                 
-                newData[this.currentList].tasks.unshift(deleteItem);
+                newData[this.currentList].items.unshift(deleteItem);
                 this.data = newData;
             },
             dragEnter(index) {
@@ -125,7 +125,7 @@
                 let currentItem;
 
                 this.data.forEach((status) => {
-                    const indexTask = status.tasks.findIndex(task => task.id === taskId);
+                    const indexTask = status.items.findIndex(task => task.id === taskId);
                     
                     if (indexTask !== -1) {
                         currentItem = indexTask;
@@ -133,10 +133,10 @@
                 })
                 const newData = this.data;
                 
-                const deleteItem = newData[currentStatus].tasks.splice(currentItem, 1)[0];
+                const deleteItem = newData[currentStatus].items.splice(currentItem, 1)[0];
                 
-                newData[currentStatus + 1].tasks.unshift(deleteItem);
-                this.data = newData;
+                newData[currentStatus + 1].items.unshift(deleteItem);
+                this.data = [...newData];
             },
             
         },
@@ -147,7 +147,7 @@
             dataTasks: {
                 immediate: true,
                 handler(newData) {
-                    this.data = newData;
+                    this.data = [...newData];
                 }
             }
         }

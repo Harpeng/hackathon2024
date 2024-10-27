@@ -2,7 +2,7 @@
 <template>
      <section class="kanban">
         <KanbanHeader 
-            :dataTasks="data" 
+            :dataTasks="tasks" 
             @update-query="queryHandler"
             ></KanbanHeader>
         <KanbanKanbanella :dataTasks="tasksAfterSearch"></KanbanKanbanella>
@@ -12,126 +12,47 @@
 <script setup>
 import KanbanHeader from '@/components/kanban/header.vue';
 import KanbanKanbanella from '@/components/kanban/kanbanella.vue';
-
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 
 definePageMeta({
   middleware: "auth",
 });
 
-const tasks = ref([]);
 const query = ref('');
-const data = [
-                    {
-                        code: 'backlog',
-                        title: 'Беклог',
-                        tasks: [
-                            {
-                                code: 'test',
-                                id: 1,
-                                title: 'Работа битрикс24',
-                                description: 'Как говорится ничего не говорится.....',
-                                performer: {
-                                    id: 2,
-                                    name: 'Владимир Иваныч'
-                                },
-                                creator: {
-                                    id: 1,
-                                    name: 'Создатель'
-                                },
-                            },
-                            {
-                                code: 'test-2',
-                                id: 2,
-                                title: 'Работа БУС',
-                                description: 'Как говорится ничего не говорится.....',
-                                performer: {
-                                    id: 3,
-                                    name: 'Владимир Романович'
-                                },
-                                creator: {
-                                    id: 1,
-                                    name: 'Создатель'
-                                },
-                            },
-                            {
-                                code: 'test-3',
-                                id: 3,
-                                title: 'Девопс',
-                                description: 'Как говорится ничего не говорится.....',
-                                performer: {
-                                    id: 3,
-                                    name: 'Владимир Романович'
-                                },
-                                creator: {
-                                    id: 1,
-                                    name: 'Создатель'
-                                },
-                            },
-                        ],
-                    },
-                    {
-                        code: 'development',
-                        title: 'В работе',
-                        tasks: [
-                            {
-                                code: 'tester',
-                                id: 23,
-                                title: 'Настройка сервера',
-                                description: 'Как говорится ничего не говорится.....',
-                                performer: {
-                                    id: 2,
-                                    name: 'Владимир Иваныч'
-                                },
-                                creator: {
-                                    id: 1,
-                                    name: 'Создатель'
-                                },
-                            },
-                        ],
-                    },
-                    {
-                        code: 'finish',
-                        title: 'Финиш',
-                        tasks: [
-                            {
-                                code: 'testing',
-                                id: 42,
-                                title: 'Покушать',
-                                description: 'Как говорится ничего не говорится.....',
-                                performer: {
-                                    id: 2,
-                                    name: 'Владимир Иваныч'
-                                },
-                                creator: {
-                                    id: 1,
-                                    name: 'Создатель'
-                                },
-                            },
-                        ],
-                    },
-                ];
-
+const tasks = ref([]);
 
 const queryHandler = (param) => {
     query.value = param;
 }                
 const tasksAfterSearch = computed(() => {
     if (query.value.trim() === '') {
-        return [...data];
+        return [...tasks.value];
     }
-    return data.map(status => {
-        const filteredTasks = status.tasks.filter(task => 
+    return tasks.value.map(status => {
+        const filteredTasks = status.items.filter(task => 
             task.title.toLowerCase().includes(query.value.toLowerCase())
         );
         return {
             code: status.code,
             title: status.title,
-            tasks: filteredTasks
+            items: filteredTasks
         }
     })
 })
 
+const getToken = () => {
+    return localStorage.getItem('user').replace(/"/g, '');
+}
+
+onMounted(async () => {
+    const {data} = await useFetch('https://coco-jamboo.ru/api/tasks', {
+        headers: {
+            authorization: 'Bearer ' + getToken(),
+        },
+        method: 'get'
+    })
+    tasks.value = data.value.data;
+})
 
 </script>
 <style lang="scss">
