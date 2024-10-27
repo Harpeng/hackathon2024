@@ -2,13 +2,18 @@
   <component
     :is="tag"
     :disabled="disabled"
-    :class="['ui-button', `ui-button--${variant}`]"
+    :class="[
+      'ui-button',
+      `ui-button--${variant}`,
+      { 'ui-button--opacity': modalBtn === true },
+    ]"
+    :style="{ color: textColor }"
     v-bind="$attrs"
     @click="click"
   >
-      <div v-if="hasIcon">
-        <slot></slot>
-      </div>
+    <div v-if="hasIcon">
+      <slot></slot>
+    </div>
     {{ title }}
   </component>
 </template>
@@ -32,6 +37,10 @@ export default {
           variant
         );
       },
+    },
+    modalBtn: {
+      type: Boolean,
+      default: false,
     },
     disabled: {
       type: Boolean,
@@ -63,6 +72,14 @@ export default {
   box-sizing: border-box;
   cursor: pointer;
 
+  &--opacity {
+    opacity: 0.6;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
   &--full-purple {
     background-color: $purple-light;
     color: $white;
@@ -73,8 +90,8 @@ export default {
     outline: none;
 
     &:disabled {
-        opacity: 0.7;
-        cursor: not-allowed;
+      opacity: 0.7;
+      cursor: not-allowed;
     }
   }
 
@@ -88,8 +105,8 @@ export default {
     outline: none;
 
     &:disabled {
-        opacity: 0.7;
-        cursor: not-allowed;
+      opacity: 0.7;
+      cursor: not-allowed;
     }
   }
 
@@ -98,13 +115,13 @@ export default {
     border: none;
 
     &:disabled {
-        opacity: 0.5;
+      opacity: 0.5;
     }
   }
 
-    &--icon {
-      background-color: transparent;
-      border: none;
-    }
+  &--icon {
+    background-color: transparent;
+    border: none;
+  }
 }
 </style>
