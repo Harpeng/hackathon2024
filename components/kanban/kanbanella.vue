@@ -32,8 +32,8 @@
                                     <li class="edit-item">
                                         <a href="#">Редактировать</a>
                                     </li>
-                                    <li class="edit-item">
-                                        <button>Переместить</button>
+                                    <li class="edit-item" v-if="index !== data.length - 1">
+                                        <button @click="taskMove(index, task.id)">Переместить</button>
                                     </li>
                                     <li class="edit-item">
                                         <button>Удалить</button>
@@ -54,98 +54,15 @@
 </template>
 <script>
     export default {
+        props: {
+            dataTasks: {
+                type: Array,
+                required: true,
+            }
+        },
         data() {
             return {
-                data: [
-                    {
-                        code: 'backlog',
-                        title: 'Беклог',
-                        tasks: [
-                            {
-                                code: 'test',
-                                id: 1,
-                                title: 'Работа битрикс24',
-                                description: 'Как говорится ничего не говорится.....',
-                                performer: {
-                                    id: 2,
-                                    name: 'Владимир Иваныч'
-                                },
-                                creator: {
-                                    id: 1,
-                                    name: 'Создатель'
-                                },
-                            },
-                            {
-                                code: 'test-2',
-                                id: 2,
-                                title: 'Работа БУС',
-                                description: 'Как говорится ничего не говорится.....',
-                                performer: {
-                                    id: 3,
-                                    name: 'Владимир Романович'
-                                },
-                                creator: {
-                                    id: 1,
-                                    name: 'Создатель'
-                                },
-                            },
-                            {
-                                code: 'test-3',
-                                id: 3,
-                                title: 'Девопс',
-                                description: 'Как говорится ничего не говорится.....',
-                                performer: {
-                                    id: 3,
-                                    name: 'Владимир Романович'
-                                },
-                                creator: {
-                                    id: 1,
-                                    name: 'Создатель'
-                                },
-                            },
-                        ],
-                    },
-                    {
-                        code: 'development',
-                        title: 'В работе',
-                        tasks: [
-                            {
-                                code: 'tester',
-                                id: 23,
-                                title: 'Настройка сервера',
-                                description: 'Как говорится ничего не говорится.....',
-                                performer: {
-                                    id: 2,
-                                    name: 'Владимир Иваныч'
-                                },
-                                creator: {
-                                    id: 1,
-                                    name: 'Создатель'
-                                },
-                            },
-                        ],
-                    },
-                    {
-                        code: 'finish',
-                        title: 'Финиш',
-                        tasks: [
-                            {
-                                code: 'testing',
-                                id: 42,
-                                title: 'Покушать',
-                                description: 'Как говорится ничего не говорится.....',
-                                performer: {
-                                    id: 2,
-                                    name: 'Владимир Иваныч'
-                                },
-                                creator: {
-                                    id: 1,
-                                    name: 'Создатель'
-                                },
-                            },
-                        ],
-                    },
-                ],
+                data: [],
                 dragItem: '',
                 dropList: [],
                 currentList: 0,
@@ -160,12 +77,10 @@
             checkMenu(event) {
                 event.target.parentNode.classList.toggle('active');
             },
-            getTasks() {
-                //this.data used
-            },
             drag(event) {
                 this.dragItem = event.target;
             },
+            //кидать запрос на изменение статуса
             drop() {
                 this.getLists().forEach(item => {
                     item.classList.remove('drag');
@@ -188,7 +103,6 @@
                 
                 newData[this.currentList].tasks.unshift(deleteItem);
                 this.data = newData;
-                //тут отправляй запрос
             },
             dragEnter(index) {
                 this.getLists()[index].classList.add('drag');
@@ -205,11 +119,29 @@
                 this.getLists().forEach(item => {
                     item.classList.remove('drag');
                 });
-            }
+            },
+            //кидать запрос на изменение статуса
+            taskMove(currentStatus, taskId) {
+                let currentItem;
+
+                this.data.forEach((status) => {
+                    const indexTask = status.tasks.findIndex(task => task.id === taskId);
+                    
+                    if (indexTask !== -1) {
+                        currentItem = indexTask;
+                    }
+                })
+                const newData = this.data;
+                
+                const deleteItem = newData[currentStatus].tasks.splice(currentItem, 1)[0];
+                
+                newData[currentStatus + 1].tasks.unshift(deleteItem);
+                this.data = newData;
+            },
             
         },
         mounted() {
-            this.getTasks();
+            this.data = this.dataTasks;
         }
 
     }

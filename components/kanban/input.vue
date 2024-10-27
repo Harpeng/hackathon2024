@@ -36,6 +36,12 @@
 <script>
 
     export default {
+        props: {
+            dataTasks: {
+                type: Array,
+                required: true,
+            }
+        },
         data() {
             return {
                 openInput: false,
@@ -43,8 +49,10 @@
         },
         methods: {
             checkInput(param) {
-                this.openInput = param;
-                this.$emit('checkInput', param);
+                if (document.body.clientWidth < 768) {
+                    this.openInput = param;
+                    this.$emit('checkInput', param);
+                }
             }
         }
     }

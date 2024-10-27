@@ -2,13 +2,12 @@
     <header class="header">
         <h1 
             :class="['header__title', inputState ? 'close' : '']"
-
             >
             Разработка
         </h1>
         <nav class="header__nav">
             <div class="header__search">
-                <KanbanInput @checkInput="checkInput"></KanbanInput>
+                <KanbanInput @checkInput="checkInput" :dataTasks="dataTasks"></KanbanInput>
             </div>
             <div :class="['header__icons', inputState ? 'close' : '']">
                 <a href="https://coco-jamboo.ru/api/tasks/export" class="header__icon" id="import">
@@ -38,6 +37,12 @@
 
     export default {
         components: [KanbanInput],
+        props: {
+            dataTasks: {
+                type: Array,
+                required: true
+            }
+        },
         data() {
             return {
                 inputState: false,
