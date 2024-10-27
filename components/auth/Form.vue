@@ -82,7 +82,7 @@
 import Input from "@/components/ui/Input.vue";
 import axios from "axios";
 import { useVuelidate } from "@vuelidate/core";
-import { maxLength, minLength, required, helpers } from "@vuelidate/validators";
+import { maxLength, minLength, required, helpers, sameAs } from "@vuelidate/validators";
 
 export default {
   components: { Input },
@@ -102,6 +102,7 @@ export default {
         maxLength(20)
       ),
       maxNameLength: helpers.withMessage("Максимум 50 символов", maxLength(50)),
+      samePassword: helpers.withMessage("Не совпадают пароли", sameAs(computed(() => state.password)) )
     };
 
     const rules = {
@@ -136,10 +137,12 @@ export default {
         required: validateParam.requiredField,
         minLength: validateParam.minLengthField,
         maxLength: validateParam.maxLengthField,
+        samePassword: validateParam.samePassword,
         alpha: helpers.withMessage(
           "Недопустимый символ",
           helpers.regex(/^[а-яА-Яa-zA-Z0-9 '-]*$/)
         ),
+
       },
     };
 
@@ -233,7 +236,7 @@ export default {
         this.showToast();
         setTimeout(() => {
           this.$router.push({
-            path: "/login",
+            path: "/",
           });
         }, 3000);
       } catch (err) {
