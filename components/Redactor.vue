@@ -70,7 +70,7 @@ export default {
         this.quillInstanceTitle.getModule("toolbar").container.style.display =
           "block";
       }
-      const htmlContent = this.quillInstanceTitle.root.innerHTML;
+      const htmlContent = this.quillInstanceTitle.root.textContent;
       this.editorTitleContent = htmlContent;
       this.$emit("inputTitle", this.editorTitleContent);
     });
