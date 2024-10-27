@@ -68,7 +68,6 @@ export default {
         },
       });
       this.list = data;
-      console.log(this.list);
       this.currentUser = this.list[0].name;
       this.selectId = this.list[0].id;
       this.$emit("responsible", this.selectId);
