@@ -31,7 +31,7 @@ export default {
     },
     variant: {
       type: String,
-      default: "purple",
+      default: "",
       validator(variant) {
         return ["full-purple", "empty-purple", "link", "icon"].includes(
           variant

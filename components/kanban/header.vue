@@ -44,6 +44,7 @@
                 textColorLeftBtn="#ffff"
                 textColorRightBtn="#a64aed"
                 :modalOpen="modalOpen"
+                headerModal
                 @isCloseModal="closeModal()"
             >
                 <Filter @filter="getFilter"></Filter>

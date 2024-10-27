@@ -19,6 +19,7 @@
       </div>
       <div class="main-modal__footer">
         <Button
+          :class="{'main-modal_invisible': headerModal === true}"
           v-if="variantLeftBtn !== ''"
           :variant="variantLeftBtn"
           :textColor="textColorLeftBtn"
@@ -46,33 +47,30 @@ export default {
       type: Boolean,
       default: false,
     },
+    headerModal: {
+        type: Boolean,
+        default: false,
+    },
     title: {
       type: String,
-      required: true,
     },
     variantLeftBtn: {
       type: String,
-      required: true,
     },
     variantRightBtn: {
       type: String,
-      required: true,
     },
     textColorLeftBtn: {
       type: String,
-      required: true,
     },
     textColorRightBtn: {
       type: String,
-      required: true,
     },
     textLeftBtn: {
       type: String,
-      required: true,
     },
     textRightBtn: {
       type: String,
-      required: true,
     },
     titleContent: {
       type: String,
@@ -162,6 +160,10 @@ export default {
   cursor: default;
   height: 0;
   padding: 0 !important;
+
+  &_invisible {
+    display: none;
+  }
   &__back {
     position: fixed;
     top: 0;
