@@ -75,7 +75,7 @@
                 }
             },
             checkMenu(event) {
-                event.target.parentNode.classList.toggle('active');
+                event.currentTarget.parentNode.classList.toggle('active');
             },
             drag(event) {
                 this.dragItem = event.target;
@@ -260,6 +260,7 @@
                 flex-direction: column;
                 gap: 6px;
                 background: $white;
+                z-index: 2;
             }
             .edit {
                 &-item {
