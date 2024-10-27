@@ -23,6 +23,7 @@
         :value="modelValue"
         :placeholder="placeholder"
         :type="type"
+        :maxlength="maxlength"
         :class="[
           'ui-field__input',
           `ui-field__input--${variant}`,
@@ -46,7 +47,7 @@
       {{ description }}
     </p>
     <div
-      v-if="errors"
+      v-if="errors.length"
       :class="[
         'ui-field__errors',
         `ui-field__errors--${variant}`,
@@ -83,6 +84,10 @@ export default {
       type: String,
       default: "",
     },
+    maxlength: {
+      type: String,
+      default: "",
+    },
     variant: {
       type: String,
       default: "auth",
@@ -98,10 +103,6 @@ export default {
       type: Array,
       required: false,
       default: () => [],
-    },
-    type: {
-      type: String,
-      default: "text",
     },
     placeholder: {
       type: String,

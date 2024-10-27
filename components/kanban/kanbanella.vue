@@ -73,9 +73,17 @@
                 textLeftBtn="Cохранить"
                 textRightBtn="Отменить"
                 :modalOpen="modalOpen"
+                :titleContent="titleContent"
+                :textContent="textContent"
+                :id="Number(selectedCardId)"
+                type="register"
+                apiMethod="PATCH"
                 @isCloseModal="closeModal(task.id)"
               >
-                sdsds
+                <Redactor
+                  @inputTitle="getTitle"
+                  @input="getText"
+                />
               </MainModal>
             </teleport>
           </li>
@@ -87,8 +95,9 @@
 </template>
 <script>
 import MainModal from "@/components/ui/MainModal.vue";
+import Redactor from "@/components/Redactor.vue";
 export default {
-  components: { MainModal },
+  components: { MainModal, Redactor },
   props: {
     dataTasks: {
       type: Array,
@@ -103,6 +112,8 @@ export default {
       currentList: 0,
       modalOpen: false,
       selectedCardId: null,
+      titleContent: "",
+      textContent: "",
     };
   },
   watch: {
@@ -118,6 +129,12 @@ export default {
     },
   },
   methods: {
+    getTitle(title) {
+      this.titleContent = title;
+    },
+    getText(text) {
+        this.textContent = text;
+    },
     openModal(id) {
       this.selectedCardId = id;
       this.modalOpen = true;
@@ -208,6 +225,7 @@ export default {
   },
   mounted() {
     this.data = [...this.dataTasks];
+    console.log(this.data);
     if (this.$route.query.modal && this.$route.query.id) {
       this.selectedCardId = this.$route.query.id;
       this.openModal(this.$route.query.id);
