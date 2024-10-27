@@ -52,6 +52,8 @@ onMounted(async () => {
         method: 'get'
     })
     tasks.value = data.value.data;
+
+    console.log(data)
 })
 
 </script>

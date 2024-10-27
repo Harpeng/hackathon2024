@@ -80,6 +80,10 @@ export default {
       type: String,
       default: "",
     },
+    status: {
+        type: Number,
+        default: null,
+    },
     type: {
       type: String,
       default: "",
@@ -133,11 +137,12 @@ export default {
             body: {
               title: this.titleContent,
               body: this.textContent,
-              task_status_id: this.id,
+              task_status_id: this.status,
             },
           }
         );
-        console.log(res);
+        this.$forceUpdate();
+        this.closeModal()
       } catch (err) {
         const errors = err.response?.data?.message;
         console.log(errors);

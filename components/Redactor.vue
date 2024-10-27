@@ -57,8 +57,9 @@ export default {
         this.quillInstance.getModule("toolbar").container.style.display =
           "block";
       }
-      this.editorContent = this.quillInstance.root.textContent;
-      this.$emit("input", this.editorContent);
+      
+      this.editorContent = this.quillInstance.root.textContent.trim();
+      this.$emit("inputText", this.editorContent);
     });
 
     this.quillInstanceTitle.on("text-change", () => {
@@ -67,8 +68,8 @@ export default {
         this.quillInstanceTitle.getModule("toolbar").container.style.display =
           "block";
       }
-      this.editorTitleContent = this.quillInstanceTitle.root.textContent;
-      console.log(this.editorTitleContent)
+      const htmlContent = this.quillInstanceTitle.root.innerHTML;
+      this.editorTitleContent = htmlContent;
       this.$emit("inputTitle", this.editorTitleContent);
     });
   },
