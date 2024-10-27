@@ -3,7 +3,7 @@
     <p :class="{'dropdown-text-invisible': isRedactor === true }">Ответственный:</p>
     <div :class="['dropdown', activeDropDown ? 'active' : '']">
       <div class="dropdown-title" @click="checkDropDown">
-        <span>{{ currentUser }}</span>
+        <span>Все юзеры</span>
         <svg
           width="24"
           height="24"
@@ -20,6 +20,13 @@
         </svg>
       </div>
       <ul class="dropdown-list">
+                <li 
+                    class="dropdown-item" 
+                    :id="0"
+                    @click="select"
+                    >
+                    Все юзеры
+                </li>
         <li
           class="dropdown-item"
           v-for="item in list"

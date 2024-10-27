@@ -22,7 +22,7 @@
                         <path d="M12 3L12 14" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round"/>
                     </svg>
                 </a>
-                <div class="header__icon" id="filter">
+                <div class="header__icon" id="filter" @click="openModal">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M3 5C3 3.89543 3.89543 3 5 3H19C20.1046 3 21 3.89543 21 5V5.41751C21 6.17739 20.7116 6.90895 20.1932 7.46447L15.2379 12.7737C14.8922 13.144 14.7 13.6317 14.7 14.1383V17.682C14.7 18.0607 14.486 18.407 14.1472 18.5764L10.7472 20.2764C10.0823 20.6088 9.3 20.1253 9.3 19.382V14.1383C9.3 13.6317 9.10776 13.144 8.76211 12.7737L3.80684 7.46447C3.28836 6.90895 3 6.17739 3 5.41751V5Z" stroke="#9E9E9E" stroke-width="1.5"/>
                     </svg>
@@ -35,13 +35,29 @@
                 </div>
             </div>
         </nav>
+        <teleport to="body">
+            <MainModal
+                v-if="modalOpen"
+                title="Фильтр"
+                variantLeftBtn="full-purple"
+                variantRightBtn="link"
+                textColorLeftBtn="#ffff"
+                textColorRightBtn="#a64aed"
+                :modalOpen="modalOpen"
+                @isCloseModal="closeModal()"
+            >
+                <Filter @filter="getFilter"></Filter>
+            </MainModal>
+        </teleport>
     </header>
 </template>
 <script>
    import KanbanInput from '@/components/kanban/input.vue';
+   import MainModal from "@/components/ui/MainModal.vue";
+   import Filter from "@/components/ui/Filter.vue";
 
     export default {
-        components: [KanbanInput],
+        components: {KanbanInput, MainModal, Filter},
         props: {
             dataTasks: {
                 type: Array,
@@ -52,6 +68,7 @@
             return {
                 inputState: false,
                 query: '',
+                modalOpen: false,
             }
         },
         methods: {
@@ -60,6 +77,23 @@
             },
             handleQueryUpdate(newQuery) {
                 this.$emit('update-query', newQuery);
+            },
+            openModal() {
+                this.modalOpen = true;
+                document.body.style.overflowY = "hidden";
+                this.$router.push({
+                    query: { ...this.$route.query, modal: true, filter: true},
+                });
+            },
+            closeModal() {
+                this.modalOpen = false;
+                document.body.style.overflowY = "scroll";
+                this.$router.push({
+                    query: { ...this.$route.query, modal: undefined, filter: undefined },
+                });
+            },
+            getFilter(param) {
+                this.$emit('getFilter', param);
             }
         },
     }

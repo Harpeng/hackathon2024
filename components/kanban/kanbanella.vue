@@ -128,7 +128,7 @@ export default {
     dataTasks: {
       immediate: true,
       handler(newData) {
-        this.data = [...newData];
+        this.data = newData;
       },
     },
   },
@@ -260,7 +260,7 @@ export default {
     },
   },
   mounted() {
-    this.data = [...this.dataTasks];
+    this.data = this.dataTasks;
     if (this.$route.query.modal && this.$route.query.id) {
       this.selectedCardId = this.$route.query.id;
       this.openModal(this.$route.query.id);
