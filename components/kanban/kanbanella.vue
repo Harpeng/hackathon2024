@@ -18,7 +18,7 @@
                     >
                     <li 
                         class="sublist-item task"
-                        v-for="task in status.tasks" 
+                        v-for="task in status.items" 
                         :key="task.code"
                         :draggable="true"
                         @dragstart="drag"
@@ -69,6 +69,9 @@
             }
         },
         methods: {
+            getToken() {
+                return localStorage.getItem('user').replace(/"/g, '');
+            },
             setActive(event) {
                 if (document.body.clientWidth <= 768) {
                     event.target.parentNode.classList.toggle('active');
@@ -80,7 +83,6 @@
             drag(event) {
                 this.dragItem = event.target;
             },
-            //кидать запрос на изменение статуса
             drop() {
                 this.getLists().forEach(item => {
                     item.classList.remove('drag');
@@ -90,7 +92,7 @@
                 let currentStatus;
                 
                 this.data.forEach((status, index) => {
-                    const indexTask = status.tasks.findIndex(task => task.id === +this.dragItem.id);
+                    const indexTask = status.items.findIndex(task => task.id === +this.dragItem.id);
                     
                     if (indexTask !== -1) {
                         currentItem = indexTask;
@@ -99,10 +101,20 @@
                 })
                 const newData = this.data;
                 
-                const deleteItem = newData[currentStatus].tasks.splice(currentItem, 1)[0];
+                const deleteItem = newData[currentStatus].items.splice(currentItem, 1)[0];
                 
-                newData[this.currentList].tasks.unshift(deleteItem);
+                newData[this.currentList].items.unshift(deleteItem);
                 this.data = newData;
+
+                $fetch('https://coco-jamboo.ru/api/tasks/' + deleteItem.id, {
+                    headers: {
+                        authorization: 'Bearer ' + this.getToken(),
+                    },
+                    body: {
+                        task_status_id: newData[this.currentList].id
+                    },
+                    method: 'patch'
+                })
             },
             dragEnter(index) {
                 this.getLists()[index].classList.add('drag');
@@ -120,12 +132,11 @@
                     item.classList.remove('drag');
                 });
             },
-            //кидать запрос на изменение статуса
             taskMove(currentStatus, taskId) {
                 let currentItem;
 
                 this.data.forEach((status) => {
-                    const indexTask = status.tasks.findIndex(task => task.id === taskId);
+                    const indexTask = status.items.findIndex(task => task.id === taskId);
                     
                     if (indexTask !== -1) {
                         currentItem = indexTask;
@@ -133,10 +144,19 @@
                 })
                 const newData = this.data;
                 
-                const deleteItem = newData[currentStatus].tasks.splice(currentItem, 1)[0];
+                const deleteItem = newData[currentStatus].items.splice(currentItem, 1)[0];
                 
-                newData[currentStatus + 1].tasks.unshift(deleteItem);
-                this.data = newData;
+                newData[currentStatus + 1].items.unshift(deleteItem);
+                this.data = [...newData];
+                $fetch('https://coco-jamboo.ru/api/tasks/' + deleteItem.id, {
+                    headers: {
+                        authorization: 'Bearer ' + this.getToken(),
+                    },
+                    body: {
+                        task_status_id: newData[currentStatus + 1].id
+                    },
+                    method: 'patch'
+                })
             },
             
         },
@@ -147,7 +167,7 @@
             dataTasks: {
                 immediate: true,
                 handler(newData) {
-                    this.data = newData;
+                    this.data = [...newData];
                 }
             }
         }
